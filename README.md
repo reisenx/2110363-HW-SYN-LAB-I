@@ -4,6 +4,6 @@
 
 There will be no guide in the repository because I hate this subject.
 
-I really appreciate TA because they writing lab guide for us, but the professor teaches nothing.
+I really appreciate TA because they are writing lab guide for us, but the professor teaches nothing.
 
 If the professor is not teaching, what is the purpose to study in the university?
