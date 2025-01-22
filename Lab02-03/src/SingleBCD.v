@@ -9,30 +9,27 @@
 // Description: A single BCD counter module for 1 digit in a 4 digit BCD counter
 //////////////////////////////////////////////////////////////////////////////////
 
-
 module SingleBCD (
-    input  wire       Trigger,
-    input  wire       Clk,
-    input  wire       Reset,
-    input  wire       Cin,
-    output wire [3:0] DataOut,
-    output wire       Cout
+    input wire Trigger, // Trigger signal to increment counter
+    input wire Clk, // Clock signal
+    input wire Reset, // Reset signal
+    input wire Cin, // Carry in from previous counter
+    output wire [3:0] DataOut, // 4-bit BCD value
+    output wire Cout // Carry out to next counter
 );
-    // Add your code here
-    reg [3:0] counter;
-    assign DataOut = counter;
-    assign Cout    = counter + Trigger + Cin > 9;
 
+    // Internal signal to calculate next value
+    reg [3:0] Counter = 4'b0000;
+    assign DataOut = Counter;
+    assign Cout = (Counter + Trigger + Cin) >= 10;
     always @(posedge Clk) begin
         if (Reset) begin
-            counter = 0;
-        end else if (Trigger || Cin) begin
-            counter = counter + Trigger + Cin;
-            if (counter > 9) begin
-                counter <= counter - 10;
-            end else begin
-            end
+            // Reset the counter to 0
+            Counter <= 4'b0000;
+        end 
+        else if (Cin | Trigger) begin
+            Counter <= (Counter + Cin + Trigger) % 10;
         end
     end
-    // End of your code
+
 endmodule

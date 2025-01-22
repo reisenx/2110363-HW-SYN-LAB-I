@@ -37,7 +37,7 @@ module SinglePulserTB ();
     begin
       if (DataOut !== expected_DataOut) begin
         $error("ERROR: TestCaseNo %0d | Time = %0t | DataOut = %b (Expected: %b)", TestCaseNo, $time, DataOut,
-               expected_DataOut);
+              expected_DataOut);
         flag = 1;
       end
     end
@@ -51,10 +51,31 @@ module SinglePulserTB ();
     DataIn = 0;
     Reset = 0;
     Clk = 0;
+
+    // Insert test cases here
     #(CLK_PERIOD + 0.1);
     Reset = 1;
-    check_output(0, 0);
-    // Insert test cases here
+    #(CLK_PERIOD + 0.1);
+    Reset = 0;
+    check_output(0, 0); // Initial must be 0
+
+    DataIn = 1;
+    check_output(1, 0); // Wait 1 clock
+    #(CLK_PERIOD + 0.1);
+    check_output(2, 1); // Change value for 1 clk
+    #(CLK_PERIOD + 0.1);
+    check_output(3, 0); // Not changing
+    #(CLK_PERIOD + 0.1);
+    check_output(4, 0); // Not changing
+    #(CLK_PERIOD + 0.1);
+    Reset = 1;
+    DataIn = 0;
+    #(CLK_PERIOD + 0.1);
+    DataIn = 1;
+    check_output(5, 0); // Wait 1 clk
+    #(CLK_PERIOD + 0.1);
+    check_output(5, 0); // Not changing (reset = 1)
+
     if (flag == 0) begin
       $display("All test cases pass");
     end else begin

@@ -42,5 +42,5 @@ module InputSanitizer #(
             );
         end
     endgenerate
-    // End of your code
+// End of your code
 endmodule

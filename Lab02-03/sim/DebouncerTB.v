@@ -39,7 +39,7 @@ module DebouncerTB ();
     begin
       if (DataOut !== expected_DataOut) begin
         $error("ERROR: TestCaseNo %0d | Time = %0t | DataOut = %b (Expected: %b)", TestCaseNo, $time, DataOut,
-               expected_DataOut);
+              expected_DataOut);
         flag = 1;
       end
     end

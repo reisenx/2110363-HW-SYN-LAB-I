@@ -9,6 +9,7 @@
 // Description: Debouncer module
 //////////////////////////////////////////////////////////////////////////////////
 
+
 module Debouncer #(
     parameter CounterWidth = 1,
     parameter DebounceTime = 1
@@ -18,7 +19,7 @@ module Debouncer #(
     input  wire Reset,
     output wire DataOut
 );
-    reg [CounterWidth-1:0] Counter = 0;
+    reg [CounterWidth-1:0] Counter;
 
     // Add your code here
     reg rDataOut;
@@ -40,5 +41,5 @@ module Debouncer #(
         end
     end
 
-    // End of your code
+// End of your code
 endmodule
