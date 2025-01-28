@@ -40,7 +40,7 @@ module SevenSegmentControllerTB ();
     begin
       if (AN !== expected_AN || Selector !== expected_Selector) begin
         $error("ERROR: TestCaseNo %0d | Time = %0t | AN = %b (Expected: %b) | Selector = %b (Expected: %b)",
-               TestCaseNo, $time, AN, expected_AN, Selector, expected_Selector);
+                TestCaseNo, $time, AN, expected_AN, Selector, expected_Selector);
         flag = 1;
       end
     end
@@ -51,13 +51,29 @@ module SevenSegmentControllerTB ();
 
   // test cases
   initial begin
-    // Reset here
-    Reset = 0;
-    Clk = 0;
-    #(CLK_PERIOD + 0.1);
-    Reset = 1;
-    check_output(0, 15, 0);
     // Insert test cases here
+    Clk = 0;
+    Reset = 0;
+
+    Reset = 1;
+    #(CLK_PERIOD);
+    check_output(TestCaseNo, 15, 0);
+    TestCaseNo = TestCaseNo + 1;
+    Reset = 0;
+    
+    for (i = 0; i < 4 * 4; i = i + 1) begin
+      #(CLK_PERIOD);
+      check_output(TestCaseNo, 15 - (4'b0001 << (i / 4)), i / 4);
+      TestCaseNo = TestCaseNo + 1;
+    end
+    
+    // Test cycling digits
+    for (i = 0; i < 4 * 4; i = i + 1) begin
+      #(CLK_PERIOD);
+      check_output(TestCaseNo, 15 - (4'b0001 << (i / 4)), i / 4);
+      TestCaseNo = TestCaseNo + 1;
+    end
+    
     if (flag == 0) begin
       $display("All test cases pass");
     end else begin

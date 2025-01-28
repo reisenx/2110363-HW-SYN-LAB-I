@@ -12,49 +12,42 @@
 
 module BCDCounter #(
     // Modify the parameter to match the requirements
-    parameter CounterWidth           = 1,
-    parameter DebounceTime           = 1,
-    parameter ControllerClockCycle   = 1,
-    parameter ControllerCounterWidth = 1
+    parameter CounterWidth = 40,
+    parameter DebounceTime = 10,
+    parameter ControllerClockCycle = 5000,
+    parameter ControllerCounterWidth = 10
 ) (
-    input  wire        Clk,
-    input  wire        Reset,
-    input  wire [ 3:0] Trigger,
-    output wire [ 7:0] Segments,
-    output wire [ 3:0] AN,
-    output wire [15:0] led
+    input wire Clk,
+    input wire Reset,
+    input wire [3:0] Trigger,
+    output wire [7:0] Segments,
+    output wire [3:0] AN
 );
-
-    // Add your code here
-    wire [ 3:0] SanitizedTrigger;
-    wire [15:0] data;
-
-    assign led = data;
-
-    InputSanitizer InputSanitizerInst (
-        .DataIn (Trigger),
-        .Clk    (Clk),
-        .Reset  (Reset),
-        .DataOut(SanitizedTrigger)
-    );
-
-    FourBCD FourBCDInst (
-        .Trigger(SanitizedTrigger),
+    wire [3:0] tmp1;
+    wire [15:0] tmp2;
+    InputSanitizer #(
+        .CounterWidth(CounterWidth),
+        .DebounceTime(DebounceTime)
+    ) sanitizer (
+        .DataIn(Trigger),
         .Clk(Clk),
         .Reset(Reset),
-        .DataOut(data)
+        .DataOut(tmp1)
     );
-
+    FourBCD counter (
+        .Reset(Reset),
+        .Clk(Clk),
+        .Trigger(tmp1),
+        .DataOut(tmp2)
+    );
     SevenSegmentDisplay #(
-        .ControllerClockCycle  (100000),
-        .ControllerCounterWidth(17)
-    ) SevenSegmentDisplayInst (
-        .DataIn  (data),
-        .Clk     (Clk),
-        .Reset   (Reset),
+        .ControllerClockCycle(ControllerClockCycle),
+        .ControllerCounterWidth(ControllerCounterWidth)
+    ) display (
+        .DataIn(tmp2),
+        .Clk(Clk),
+        .Reset(Reset),
         .Segments(Segments),
-        .AN      (AN)
+        .AN(AN)
     );
-
-    // End of your code
 endmodule
