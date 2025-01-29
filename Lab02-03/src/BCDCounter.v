@@ -12,10 +12,10 @@
 
 module BCDCounter #(
     // Modify the parameter to match the requirements
-    parameter CounterWidth = 40,
-    parameter DebounceTime = 10,
-    parameter ControllerClockCycle = 5000,
-    parameter ControllerCounterWidth = 10
+    parameter CounterWidth = 17,
+    parameter DebounceTime = 100000,
+    parameter ControllerClockCycle = 250000,
+    parameter ControllerCounterWidth = 19
 ) (
     input wire Clk,
     input wire Reset,
